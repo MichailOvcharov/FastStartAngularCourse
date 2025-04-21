@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'my-app';
+  searchQuery = '';
+
+  onSearch() {
+    console.log("Нажали поиск!");
+  }
 }
