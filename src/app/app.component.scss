@@ -1,0 +1,10 @@
+.container {
+  background: var(--surface-ground) !important;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  .content {
+    flex-grow: 1;
+  }
+}
+
