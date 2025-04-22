@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Course} from "../../../../domain/course";
 import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-course-item',
@@ -12,7 +13,7 @@ export class CourseItemComponent {
   @Input() public course: Course = {} as Course;
   @Output() public delete: EventEmitter<number> = new EventEmitter<number>();
   @Output() public edit:   EventEmitter<Course> = new EventEmitter<Course>();
-  creationDate: Date = new Date('2023-03-18');
+  // creationDate: Date = new Date(2025, 2, 15);
 
   public onEdit(): void {
     this.edit.emit(this.course );
@@ -34,11 +35,5 @@ export class CourseItemComponent {
     }).format(date)
   }
 
-  formatDuration(totalMinutes: number): string {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
 
-    // Склонение можно улучшить (час/часа/часов)
-    return `${hours} час ${minutes} минуты`;
-  }
 }

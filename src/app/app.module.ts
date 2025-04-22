@@ -8,6 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import {DatePipe} from "@angular/common";
 import localeRu from '@angular/common/locales/ru';
+import {ChangeBorderDirectiveDirective} from "./modules/courses/directives/change-border-directive.directive";
+import {DurationPipe} from "./modules/courses/pipes/duration.pipe";
+import {OrderbyPipe} from "./modules/courses/pipes/orderby.pipe";
+import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
 
 @NgModule({
   declarations: [
