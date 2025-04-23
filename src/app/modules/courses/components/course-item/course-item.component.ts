@@ -13,7 +13,6 @@ export class CourseItemComponent {
   @Input() public course: Course = {} as Course;
   @Output() public delete: EventEmitter<number> = new EventEmitter<number>();
   @Output() public edit:   EventEmitter<Course> = new EventEmitter<Course>();
-  // creationDate: Date = new Date(2025, 2, 15);
 
   public onEdit(): void {
     this.edit.emit(this.course );
@@ -34,6 +33,5 @@ export class CourseItemComponent {
       year: 'numeric'
     }).format(date)
   }
-
 
 }

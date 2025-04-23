@@ -2,25 +2,40 @@ import {
   AfterContentChecked,
   AfterContentInit, AfterViewChecked, AfterViewInit,
   Component,
-  DoCheck,
+  DoCheck, Input,
   OnChanges, OnDestroy,
-  OnInit,
+  OnInit, Output,
   SimpleChanges
 } from '@angular/core';
+import {AuthService} from "../../../../services/auth/auth.service";
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  providers: [AuthService]
 })
 export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked,
   AfterViewInit, AfterViewChecked, OnDestroy
 {
+  @Output() logout = new EventEmitter<void>();
+  @Output() loginData = new EventEmitter<{ email: string, password: string }>();
+  @Input() authenticated: boolean = true;
+  login: string | null | undefined;
+  isAuthenticated : boolean = true;
+  constructor(private readonly authService: AuthService) {
+  }
   ngOnChanges(changes: SimpleChanges): void {
     console.log("Вызов ngOnChanges()");
   }
 
   ngOnInit(): void {
+    this.login = this.authService.getUserInfo();
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.isAuthenticated = this.authenticated;
+    console.log(this.login);
+    console.log(this.isAuthenticated);
     console.log("Вызов ngOnInit()");
   }
 
@@ -41,6 +56,8 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   }
 
   ngDoCheck(): void {
+    this.isAuthenticated = this.authenticated;
+    console.log(this.isAuthenticated);
     console.log("Вызов ngDoCheck()");
   }
 
@@ -49,7 +66,10 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   }
  public onExit():void
  {
-     console.log("Выход!");
+   this.authService.logout();
+   this.logout.emit();
+   this.isAuthenticated = false;
+   console.log("Выход " + this.login);
  }
 
 }

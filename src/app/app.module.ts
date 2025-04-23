@@ -12,6 +12,8 @@ import {ChangeBorderDirectiveDirective} from "./modules/courses/directives/chang
 import {DurationPipe} from "./modules/courses/pipes/duration.pipe";
 import {OrderbyPipe} from "./modules/courses/pipes/orderby.pipe";
 import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AuthModule} from "./modules/auth/auth.module";
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
     CoreModule,
     CoursesModule,
     FormsModule,
-    ButtonModule
+    ButtonModule,
+    BrowserAnimationsModule,
+    AuthModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },

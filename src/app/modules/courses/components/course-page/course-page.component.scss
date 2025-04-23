@@ -29,3 +29,28 @@
     cursor: pointer;
   }
 }
+:host ::ng-deep .p-confirm-dialog {
+  .p-button {
+    min-width: 100px;
+    margin: 0 0.5rem;
+  }
+
+  .p-button-accept {
+    background: #ef4444 !important; // Красный
+    border-color: #ef4444 !important;
+
+    &:hover {
+      background: #dc2626 !important; // Темнее при наведении
+    }
+  }
+
+  .p-button-reject {
+    background: white !important;
+    color: #3b82f6 !important; // Синий текст
+    border: 1px solid #3b82f6 !important;
+
+    &:hover {
+      background: #f8fafc !important; // Светлее при наведении
+    }
+  }
+}

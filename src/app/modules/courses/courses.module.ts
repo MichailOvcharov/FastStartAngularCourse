@@ -11,6 +11,9 @@ import localeRu from "@angular/common/locales/ru";
 import localeRuExtra from '@angular/common/locales/extra/ru';
 import { OrderbyPipe } from './pipes/orderby.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
+import { ConfirmDialogModule} from "primeng/confirmdialog";
+import {ConfirmationService} from "primeng/api";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 registerLocaleData(localeRu, 'ru', localeRuExtra);
 
@@ -31,10 +34,13 @@ registerLocaleData(localeRu, 'ru', localeRuExtra);
   imports: [
     CommonModule,
     CoreModule,
-    ButtonModule
+    ButtonModule,
+    ConfirmDialogModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
+    ConfirmationService,
     DatePipe
   ],
 })
