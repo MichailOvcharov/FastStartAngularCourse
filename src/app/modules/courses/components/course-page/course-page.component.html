@@ -1,0 +1,39 @@
+<div class = "flex justify-content-between align-items-center">
+  <app-search (search)="onSearch($event)"></app-search>
+  <app-add-button></app-add-button>
+</div>
+
+<p-confirmDialog
+  header="Удалит курс?"
+  icon="pi pi-exclamation-triangle"
+  acceptLabel="Удалить"
+  rejectLabel="Отмена"
+  acceptButtonStyleClass="p-button-danger"
+  rejectButtonStyleClass="p-button-text"
+  [style]="{width: '550px'}">
+</p-confirmDialog>
+
+<div *ngIf="filteredCourses.length>0; else notFound">
+  <app-course-item *ngFor="let course of filteredCourses  | orberby: 'creation_date'"
+                   [course]="course"
+                   (edit)="onEdit($event)"
+                   (delete)="confirmDelete(course.id)">
+  </app-course-item>
+</div>
+<ng-template #notFound>
+  <div class="not-found-container">
+    <img src="././assets/banned_2.png" alt="logotype" class="logo-image">
+    <h2>Ничего не найдено</h2>
+    <button (click)="resetSearch()">Сбросить фильтры</button>
+  </div>
+</ng-template>
+<div class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
+  <button pButton
+          type="button"
+          label="Загрузить еще"
+          class="p-button-lg  double-width"
+          style="background-color: var(--surface-ground); color: grey"
+          (click)="load()">
+  </button>
+</div>
+
