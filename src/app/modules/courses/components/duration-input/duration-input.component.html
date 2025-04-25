@@ -1,0 +1,44 @@
+<div class = "input-with-suffix">
+  <div class ="duration-input-wrapper">
+    <div class="number-input" [class.disabled]="disabled">
+      <input
+        type="number"
+        [min]="min"
+        [max]="max"
+        [step]="step"
+        [value]="duration"
+        [disabled]="disabled"
+        (input)="onInputChange($event)"
+        (blur)="onTouched()"
+        type="text"
+        placeholder="Продолжительность*"
+      >
+      <div class="number-input__controls">
+        <button
+          type="button"
+          (click)="increment()"
+          [disabled]="disabled || duration >= max"
+          class="number-input__button number-input__button--up"
+        >
+          <svg viewBox="0 0 12 12" class="arrow-icon">
+            <path d="M6 2L11 10H1L6 2Z"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          (click)="decrement()"
+          [disabled]="disabled || duration <= min"
+          class="number-input__button number-input__button--down"
+        >
+          <svg viewBox="0 0 12 12" class="arrow-icon">
+            <path d="M6 10L1 2H11L6 10Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <span class="duration-suffix">{{duration | duration}}</span>
+  </div>
+</div>
+

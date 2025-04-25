@@ -14,6 +14,12 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { AddEditCourseComponent } from './components/add-edit-course/add-edit-course.component';
+import {FormsModule} from "@angular/forms";
+import {CalendarModule} from "primeng/calendar";
+import { DurationInputComponent } from './components/duration-input/duration-input.component';
+import { AuthorsComponent } from './components/authors/authors.component';
+import {InputNumberModule} from "primeng/inputnumber";
 
 registerLocaleData(localeRu, 'ru', localeRuExtra);
 
@@ -25,7 +31,10 @@ registerLocaleData(localeRu, 'ru', localeRuExtra);
     ChangeBorderDirectiveDirective,
     DurationPipe,
     OrderbyPipe,
-    FilterPipe
+    FilterPipe,
+    AddEditCourseComponent,
+    DurationInputComponent,
+    AuthorsComponent
   ],
   exports: [
     CoursePageComponent,
@@ -36,7 +45,10 @@ registerLocaleData(localeRu, 'ru', localeRuExtra);
     CoreModule,
     ButtonModule,
     ConfirmDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule,
+    CalendarModule,
+    InputNumberModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },

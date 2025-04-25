@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {Course} from "../../../../domain/course";
 
 @Component({
   selector: 'app-add-button',
@@ -6,7 +7,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-button.component.scss']
 })
 export class AddButtonComponent {
-  public onAdd(): void {
+  @Output() add = new EventEmitter<Course>();
+
+
+  public onAddCourse(): void {
+    const newCourse: Course = {
+      id: 1,
+      title: 'Новый курс',
+      description: '',
+      duration: 0,
+      creation_date: new Date(),
+      topRated: true
+    };
+    this.add.emit(newCourse);
     console.log("Добавляем курс!");
   }
 }

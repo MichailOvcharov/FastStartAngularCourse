@@ -6,9 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DurationPipe implements PipeTransform {
 
   transform(minutes: number): string {
-  //   const hour = Math.floor(minutes / 60);
-  //   const min = minutes % 60;
-  //   return hour > 0 ? `${hour} часа ${min} минут` : `${min} минут`;
     if (isNaN(minutes)) return '';
 
     const hours = Math.floor(minutes / 60);

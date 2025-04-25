@@ -15,6 +15,7 @@ export class CoursePageComponent implements OnInit  {
   public courses: Course[] = [];
   filteredCourses : Course[] = []; // Отфильтрованный список
   searchTerm = ''; // Текущий поисковый запрос
+  showCourseForm = false;
 
   constructor(
     private filterPipe: FilterPipe,
@@ -91,5 +92,18 @@ export class CoursePageComponent implements OnInit  {
       'creation_date',
       'desc'
     );
+  }
+
+  onAddCourse() {
+    this.showCourseForm = true;
+    console.log("Добавляем курс2!");
+  }
+
+  onCancelEdit() {
+     console.log("Отмена!");
+  }
+
+  onCourseSaved(course: Course) {
+    console.log("Сохранение!");
   }
 }
