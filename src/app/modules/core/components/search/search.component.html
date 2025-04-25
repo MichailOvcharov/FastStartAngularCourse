@@ -1,0 +1,12 @@
+<div class="flex pt-3">
+  <span class="flex p-input-icon-left align-items-center p-float-label gap-2">
+    <i class="pi pi-search"></i>
+    <input type="text" pInputText id="search" [(ngModel)]="searchInput">
+    <label for="search">Поиск</label>
+    <button pButton
+            type="button"
+            label="Поиск"
+            (click)="onSearch()"
+            ></button>
+  </span>
+</div>

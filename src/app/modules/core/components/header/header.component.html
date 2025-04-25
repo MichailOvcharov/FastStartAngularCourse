@@ -1,0 +1,11 @@
+<header class="flex py-3 px-6 main-header w-full">
+    <div><app-logo></app-logo></div>
+
+    <div *ngIf="isAuthenticated" class="flex justify-content-end  align-items-center gap-2 w-full">
+      <i class="pi pi-user" style="font-size: 1.2rem;"></i>
+      <span class="text-sm font-medium">Овчаров Михаил</span>
+      <i class="pi pi-sign-out" style="font-size: 1.2rem;" (click)="onExit()"></i>
+      <span class="text-sm font-medium" (click)="onExit()">Выход</span>
+    </div>
+</header>
+
