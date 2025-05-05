@@ -1,5 +1,5 @@
 <div class="container">
-  <app-header         (logout)="handleLogout()" [authenticated]="isAuthenticated"></app-header>
+  <app-header (logout)="handleLogout()" [authenticated]="isAuthenticated"></app-header>
   <main *ngIf="isAuthenticated" class = "content px-6">
     <app-breadcrumbs></app-breadcrumbs>
     <app-course-page></app-course-page>

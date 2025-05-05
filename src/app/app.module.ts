@@ -15,6 +15,7 @@ import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthModule} from "./modules/auth/auth.module";
 
+
 @NgModule({
   declarations: [
     AppComponent

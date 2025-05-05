@@ -1,12 +1,12 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Course} from "../../../../domain/course";
-import { DatePipe } from '@angular/common';
-import { CommonModule } from '@angular/common';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-course-item',
   templateUrl: './course-item.component.html',
   styleUrls: ['./course-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DatePipe]
 })
 export class CourseItemComponent {
@@ -15,7 +15,7 @@ export class CourseItemComponent {
   @Output() public edit:   EventEmitter<Course> = new EventEmitter<Course>();
 
   public onEdit(): void {
-    this.edit.emit(this.course );
+    this.edit.emit(this.course);
     console.log("Id курса: " + this.course.id);
     console.log("Заголовок курса: " + this.course.title);
     console.log("Описание курса: " + this.course.description);
