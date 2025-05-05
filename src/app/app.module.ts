@@ -14,6 +14,7 @@ import {OrderbyPipe} from "./modules/courses/pipes/orderby.pipe";
 import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthModule} from "./modules/auth/auth.module";
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {AuthModule} from "./modules/auth/auth.module";
     FormsModule,
     ButtonModule,
     BrowserAnimationsModule,
-    AuthModule
+    AuthModule,
+    AppRoutingModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },

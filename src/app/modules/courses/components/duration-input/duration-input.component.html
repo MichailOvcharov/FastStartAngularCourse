@@ -1,5 +1,5 @@
-<div class = "input-with-suffix">
-  <div class ="duration-input-wrapper">
+<div class="input-with-suffix">
+  <div class="duration-input-wrapper">
     <div class="number-input" [class.disabled]="disabled">
       <input
         type="number"
@@ -10,8 +10,7 @@
         [disabled]="disabled"
         (input)="onInputChange($event)"
         (blur)="onTouched()"
-        type="text"
-        placeholder="Продолжительность*"
+        [placeholder]="placeholder"
       >
       <div class="number-input__controls">
         <button
@@ -37,8 +36,6 @@
       </div>
     </div>
   </div>
-  <div>
-    <span class="duration-suffix">{{duration | duration}}</span>
-  </div>
+  <span class="duration-suffix">{{duration | duration}}</span>
 </div>
 

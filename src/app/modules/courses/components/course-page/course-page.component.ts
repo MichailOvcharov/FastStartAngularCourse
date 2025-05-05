@@ -4,6 +4,7 @@ import {FilterPipe} from "../../pipes/filter.pipe";
 import {OrderbyPipe} from "../../pipes/orderby.pipe";
 import {CoursesService} from "../../../../services/courses/courses.service";
 import {ConfirmationService, MessageService} from "primeng/api";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-course-page',
@@ -22,7 +23,8 @@ export class CoursePageComponent implements OnInit  {
     private orderByPipe: OrderbyPipe,
     private readonly courseService: CoursesService,
     private readonly сonfirmationService: ConfirmationService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private router: Router
   ) {
     this.resetSearch();
   }
@@ -38,7 +40,7 @@ export class CoursePageComponent implements OnInit  {
   }
 
   onEdit(course: Course) {
-    ;
+    this.router.navigateByUrl(`/courses/${course.id}`);
   }
 
   onDelete(courseId: number) {
@@ -95,8 +97,9 @@ export class CoursePageComponent implements OnInit  {
   }
 
   onAddCourse() {
-    this.showCourseForm = true;
+    // this.showCourseForm = true;
     console.log("Добавляем курс2!");
+    this.router.navigateByUrl('/courses/new');
   }
 
   onCancelEdit() {

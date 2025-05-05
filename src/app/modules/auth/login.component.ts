@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AuthService} from "../../../../services/auth/auth.service";
+import {AuthService} from "../../services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -12,16 +13,22 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly authService: AuthService,
+              private router: Router,) {
   }
 
   ngOnInit(): void {
   }
 
   login() {
+    if (!this.email || !this.password) {
+      return;
+    }
     this.loginData.emit({ email:this.email, password:this.password});
     this.authService.login(this.email, this.password);
-    console.log("Выполнен вход в систему.");
+    if (this.authService.isAuthenticated()) {
+      this.router.navigateByUrl('/courses');
+    }
   }
 
 }

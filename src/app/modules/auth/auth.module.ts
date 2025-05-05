@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './login.component';
 import {CoreModule} from "../core/core.module";
 import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
 import {FormsModule} from "@angular/forms";
 import {PasswordModule} from "primeng/password";
 import {CardModule} from "primeng/card";
-
-
+import {AuthRoutingModule} from "./auth-routing.module";
 
 @NgModule({
   declarations: [
@@ -24,7 +23,8 @@ import {CardModule} from "primeng/card";
     ButtonModule,
     CardModule,
     FormsModule,
-    PasswordModule
+    PasswordModule,
+    AuthRoutingModule
   ]
 })
 export class AuthModule { }

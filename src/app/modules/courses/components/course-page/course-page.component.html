@@ -31,16 +31,7 @@
   </ng-template>
 </div>
 
-<div *ngIf="showCourseForm">
-  <div>
-    <app-add-edit-course
-      (cancel)="onCancelEdit()"
-      (save)="onCourseSaved($event)"
-    ></app-add-edit-course>
-  </div>
-</div>
-
-<div *ngIf="!showCourseForm" class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
+<div *ngIf="!showCourseForm && (filteredCourses.length>0)" class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
   <button pButton
           type="button"
           label="Загрузить еще"

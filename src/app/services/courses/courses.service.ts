@@ -98,8 +98,16 @@ export class CoursesService {
   }
 
   createCourse(courseData: Course): Course {
-    this.courses.push(courseData);
-    return courseData;
+    const ids = this.courses.map(c => c.id).filter(id => id !== undefined) as number[];
+    const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+
+    const newCourse: Course = {
+      ...courseData,
+      id: newId
+    };
+
+    this.courses.push(newCourse);
+    return newCourse;
   }
 
   updateCourse(id: number, updates: Course): Course | undefined {
