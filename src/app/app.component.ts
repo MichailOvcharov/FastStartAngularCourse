@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -12,14 +13,15 @@ export class AppComponent implements OnInit  {
   isAuthenticated: boolean = false;
   userName = "";
 
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly authService: AuthService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
     this.checkAuth()
   }
   onSearch() {
-    console.log("Нажали поиск!");
+    // console.log("Нажали поиск!");
   }
   handleLogin(loginData: { email: string, password: string }) {
     // 1. Вызываем метод сервиса
@@ -28,9 +30,15 @@ export class AppComponent implements OnInit  {
     // 2. Проверяем аутентификацию
     this.isAuthenticated = this.authService.isAuthenticated();
 
+    console.log("isAuthenticated ="+ this.isAuthenticated);
+
     // 3. Получаем имя пользователя
     const user = this.authService.getUser();
     this.userName = user ? `${user.first_name} ${user.last_name}` : '';
+
+    // if (this.authService.isAuthenticated()) {
+    //   this.router.navigateByUrl('/courses');
+    // }
 
     console.log('Выполнен вход в систему:', loginData);
   }

@@ -1,67 +1,77 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {DurationPipe} from "../../pipes/duration.pipe";
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
   selector: 'app-duration-input',
   templateUrl: './duration-input.component.html',
   styleUrls: ['./duration-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DurationPipe]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DurationInputComponent),
+      multi: true
+    }
+  ]
 })
-export class DurationInputComponent {
-  @Input() duration: number = 0;
-  @Output() durationChange = new EventEmitter<number>();
-
+export class DurationInputComponent implements ControlValueAccessor {
   @Input() min: number = 0;
   @Input() max: number = 10000;
   @Input() step: number = 1;
-  @Input() value: number = 0;
+  @Input() placeholder: string = 'Продолжительность*';
 
-  @Output() valueChange = new EventEmitter<number>();
+  private _duration: number = 0;
+
+  @Input()
+  get duration(): number {
+    return this._duration;
+  }
+
+  set duration(value: number) {
+    if (value !== this._duration) {
+      this._duration = value;
+      this.durationChange.emit(this._duration);
+      this.onChange(this._duration);
+    }
+  }
+
+  @Output() durationChange = new EventEmitter<number>();
 
   disabled = false;
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: (value: number) => void = () => {};
+  onTouched: () => void = () => {};
 
   increment() {
     if (!this.disabled) {
       this.duration = Math.min(this.max, this.duration + this.step);
-      this.emitChanges();
     }
   }
 
   decrement() {
     if (!this.disabled) {
       this.duration = Math.max(this.min, this.duration - this.step);
-      this.emitChanges();
     }
   }
 
   onInputChange(event: Event) {
     const value = +(event.target as HTMLInputElement).value;
     this.duration = Math.max(this.min, Math.min(this.max, value));
-    this.emitChanges();
   }
 
-  private emitChanges() {
-    this.onChange(this.duration);
-    this.onTouched();
-    this.valueChange.emit(this.duration);
+  // ControlValueAccessor methods
+  writeValue(value: number): void {
+    this.duration = value;
   }
 
-  writeValue(duration: number): void {
-    this.duration = duration;
-  }
-
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: number) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 }

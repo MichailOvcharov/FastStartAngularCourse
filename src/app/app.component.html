@@ -1,9 +1,11 @@
 <div class="container">
   <app-header (logout)="handleLogout()" [authenticated]="isAuthenticated"></app-header>
-  <main *ngIf="isAuthenticated" class = "content px-6">
-    <app-breadcrumbs></app-breadcrumbs>
-    <app-course-page></app-course-page>
+<!--  <main *ngIf="isAuthenticated" class = "content px-6">-->
+  <main class = "content px-6">
+<!--    <app-breadcrumbs></app-breadcrumbs>-->
+<!--    <app-course-page></app-course-page>-->
+     <router-outlet></router-outlet>
   </main>
-  <app-login *ngIf="!isAuthenticated" (loginData)="handleLogin($event)"></app-login>
+<!--  <app-login *ngIf="!isAuthenticated" (loginData)="handleLogin($event)"></app-login>-->
   <app-footer></app-footer>
 </div>

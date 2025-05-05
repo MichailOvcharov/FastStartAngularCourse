@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {User} from "../../domain/user";
 import {AuthData} from "../../domain/auth-data";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,10 @@ export class AuthService {
   private readonly token = 'token';
   email: string = '';
   password: string = '';
+
+  constructor(private router: Router) {
+
+  }
 
   private user: User = {
     id: 1,
@@ -35,6 +40,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.token);
+    this.router.navigateByUrl('/login');
   }
 
   isAuthenticated(): boolean {
@@ -53,6 +59,8 @@ export class AuthService {
 
   getUserName(): string {
     const user = this.getUser();
+    console.log("user " + user);
+    console.log("user " + user?.email + " " + user?.first_name + " " + user?.first_name);
     return user ? `${user.first_name} ${user.last_name}` : 'Гость';
   }
 

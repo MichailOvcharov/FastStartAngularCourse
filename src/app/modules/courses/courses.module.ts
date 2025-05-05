@@ -20,6 +20,8 @@ import {CalendarModule} from "primeng/calendar";
 import { DurationInputComponent } from './components/duration-input/duration-input.component';
 import { AuthorsComponent } from './components/authors/authors.component';
 import {InputNumberModule} from "primeng/inputnumber";
+import { CoursesRoutingModule } from './courses-routing.module';
+import { CoursesComponent } from './courses.component';
 
 registerLocaleData(localeRu, 'ru', localeRuExtra);
 
@@ -34,7 +36,8 @@ registerLocaleData(localeRu, 'ru', localeRuExtra);
     FilterPipe,
     AddEditCourseComponent,
     DurationInputComponent,
-    AuthorsComponent
+    AuthorsComponent,
+    CoursesComponent
   ],
   exports: [
     CoursePageComponent,
@@ -48,7 +51,8 @@ registerLocaleData(localeRu, 'ru', localeRuExtra);
     BrowserAnimationsModule,
     FormsModule,
     CalendarModule,
-    InputNumberModule
+    InputNumberModule,
+    CoursesRoutingModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },

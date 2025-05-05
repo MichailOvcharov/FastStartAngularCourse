@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import {AuthService} from "../../../../services/auth/auth.service";
 import { EventEmitter } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -24,7 +25,9 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   @Input() authenticated: boolean = true;
   login: string | null | undefined;
   isAuthenticated : boolean = true;
-  constructor(private readonly authService: AuthService) {
+  fio: string = "";
+  constructor(private readonly authService: AuthService,
+              private  router: Router) {
   }
   ngOnChanges(changes: SimpleChanges): void {
     console.log("Вызов ngOnChanges()");
@@ -33,9 +36,9 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   ngOnInit(): void {
     this.login = this.authService.getUserInfo();
     this.isAuthenticated = this.authService.isAuthenticated();
-    this.isAuthenticated = this.authenticated;
+    this.fio = this.authService.getUserName();
     console.log(this.login);
-    console.log(this.isAuthenticated);
+    console.log(this.authService.getUserName());
     console.log("Вызов ngOnInit()");
   }
 
@@ -56,7 +59,8 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   }
 
   ngDoCheck(): void {
-    this.isAuthenticated = this.authenticated;
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.fio = this.authService.getUserName();
     console.log(this.isAuthenticated);
     console.log("Вызов ngDoCheck()");
   }

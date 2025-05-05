@@ -2,7 +2,11 @@
   <p-card styleClass="compact-card">
     <div class="flex gap-2">
       <i class="pi pi-home" style="font-size: 1.2rem;"></i>
-      <span class="text-sm font-medium">{{text}}</span>
+      <span class="text-sm font-medium" (click)="goToMainPage()" >{{text}}</span>
+      <span class="text-sm font-medium" *ngIf="breadcrumb">
+      <span class="divider"> > </span>
+      <span class="text-sm font-medium" *ngIf="breadcrumb">{{ breadcrumb}}</span>
+    </span>
     </div>
   </p-card>
 </div>
