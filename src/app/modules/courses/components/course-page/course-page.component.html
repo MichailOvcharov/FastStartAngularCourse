@@ -16,7 +16,7 @@
     <button (click)="resetSearch()">Сбросить фильтры</button>
   </div>
 </ng-template>
-<div class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
+<div *ngIf="filteredCourses.length>0" class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
   <button pButton
           type="button"
           label="Загрузить еще"
