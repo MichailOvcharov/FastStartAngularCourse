@@ -1,0 +1,43 @@
+<div class="pt-3">
+  <div class="course-container p-4 shadow-2 border-round-md mb-4" [appChangeBorderDirective]="course.creation_date"
+       [ngClass]="{'top-rated': course.topRated}">
+    <!-- Шапка курса -->
+    <div class="flex justify-content-between align-items-center mb-3" >
+      <div class="flex align-items-center gap-2 flex-1">
+        <h2 class="m-0 text-2xl font-normal truncate" style="max-width: 600px">{{course.title | uppercase }}</h2>
+        <i *ngIf="course.topRated" class="pi pi-star-fill text-yellow-500" style="font-size: 1rem"></i>
+      </div>
+      <div class="flex text-color-secondary align-items-center gap-2">
+        <i class="pi pi-clock mr-2"></i>
+        <span>{{course.duration | duration}}</span>
+        <i class="pi pi-calendar mr-2"></i>
+        <span>{{course.creation_date ? (course.creation_date | date:'d MMMM yyyy') + ' года' : 'Дата не указана'}}</span>
+      </div>
+    </div>
+
+    <!-- Описание и кнопки -->
+    <div class="flex justify-content-between align-items-start">
+      <div class="flex-1 pr-4">
+        <p class="m-0 text-color-secondary line-height-3">
+          {{course.description}}
+        </p>
+      </div>
+
+      <div class="flex gap-2">
+        <button pButton
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Редактировать"
+                tooltipPosition="top"
+                (click)="onEdit()"></button>
+
+        <button pButton
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-text p-button-sm p-button-danger"
+                pTooltip="Удалить"
+                tooltipPosition="top"
+                (click)="onDelete()"></button>
+      </div>
+    </div>
+  </div>
+</div>
