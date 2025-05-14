@@ -1,6 +1,6 @@
 import {
   AfterContentChecked,
-  AfterContentInit, AfterViewChecked, AfterViewInit,
+  AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   DoCheck, Input,
   OnChanges, OnDestroy,
@@ -10,12 +10,14 @@ import {
 import {AuthService} from "../../../../services/auth/auth.service";
 import { EventEmitter } from '@angular/core';
 import {Router} from "@angular/router";
+import {Subscription, tap} from "rxjs";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  providers: [AuthService]
+  providers: [AuthService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked,
   AfterViewInit, AfterViewChecked, OnDestroy
@@ -26,19 +28,33 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
   login: string | null | undefined;
   isAuthenticated : boolean = true;
   fio: string = "";
+  userInfo: string = "";
+  user = new Subscription();
+
+  private dataSubscription!: Subscription;
+
   constructor(private readonly authService: AuthService,
-              private  router: Router) {
+              private  router: Router,
+              private ref: ChangeDetectorRef,
+              ) {
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log("Вызов ngOnChanges()");
   }
 
   ngOnInit(): void {
-    this.login = this.authService.getUserInfo();
     this.isAuthenticated = this.authService.isAuthenticated();
-    this.fio = this.authService.getUserName();
-    console.log(this.login);
-    console.log(this.authService.getUserName());
+    console.log(this.isAuthenticated);
+    this.user.add(this.authService.getUser().subscribe());
+    this.user.add(this.authService.getUserName().pipe(
+      tap(user => {
+        console.log(user);
+        this.fio = user;
+        this.ref.markForCheck();
+      })
+    ).subscribe());
+
     console.log("Вызов ngOnInit()");
   }
 
@@ -60,12 +76,11 @@ export class HeaderComponent implements OnChanges, OnInit, DoCheck, AfterContent
 
   ngDoCheck(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
-    this.fio = this.authService.getUserName();
-    console.log(this.isAuthenticated);
     console.log("Вызов ngDoCheck()");
   }
 
   ngOnDestroy(): void {
+    this.user.unsubscribe();
     console.log("Вызов ngOnDestroy()");
   }
  public onExit():void

@@ -1,132 +1,97 @@
 import { Injectable } from '@angular/core';
 import {Course} from "../../domain/course";
+import {HttpClient} from "@angular/common/http";
+import {catchError, map, Observable, of, tap, throwError} from "rxjs";
+import {User} from "../../domain/user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
-  private courses: Course[] = [{
-      id: 1,
-      title: "Быстрый старт по Angular",
-      creation_date: new Date(2025, 3, 20),
-      duration: 6000,
-      description: "Обратите внимание: 98 ч. 15 мин. - это время, которое можно списать на обучение в Учебном центре, в которое входит просмотр лекций и выполнение домашнего задания. Данный курс предполагает трудозатраты на самообучение во внерабочее время сверх указанных 98 ч. 15 мин. для более полного и глубокого понимания тем, а также для заполнения пробелов по требованиям к знаниям слушателей курса.",
-      topRated: true,
-    },
-    {
-      id: 2,
-      title: "Быстрый старт по Spring Boot",
-      creation_date: new Date(2025, 3, 21),
-      duration: 4800,
-      description: "Название курса: Быстрый старт по Spring Boot",
-      topRated: false,
-    },
-    {
-      id: 3,
-      title: "Быстрый старт по QPalete",
-      creation_date: new Date(2025, 5, 9),
-      duration: 1200,
-      description: "Быстрый старт по QPalete",
-      topRated: true,
-    },
-    {
-      id: 4,
-      title: "Быстрый старт по Java",
-      creation_date: new Date(2025, 4, 11),
-      duration: 1200,
-      description: "Быстрый старт по Java",
-      topRated: false
-    },
-    {
-      id: 5,
-      title: "Быстрый старт разработчика FLEXTERA",
-      creation_date: new Date(2025, 4, 25),
-      duration: 2400,
-      description: "Быстрый старт разарботчика Flextera",
-      topRated: true
-    },
-    {
-      id: 6,
-      title: "Быстрый старт разарботчика MSA",
-      creation_date: new Date(2025, 2, 15),
-      duration: 2407,
-      description: "Быстрый старт разарботчика MSA",
-      topRated: true
-    },
-    {
-      id: 7,
-      title: "Быстрый старт разарботчика MSA",
-      creation_date: new Date(2025, 1, 15),
-      duration: 2402,
-      description: "Быстрый старт разарботчика MSA",
-      topRated: true
-    },
-    {
-      id: 8,
-      title: "Быстрый старт языка GO",
-      creation_date: new Date(2025, 6, 21),
-      duration: 3601,
-      description: "Быстрый старт языка GO",
-      topRated: false
-    },
-    {
-      id: 9,
-      title: "Быстрый старт языка C++",
-      creation_date: new Date(2025, 1, 15),
-      duration: 5040,
-      description: "Быстрый старт языка C++",
-      topRated: true
-    },
-    {
-      id: 10,
-      title: "Обучающее видео",
-      creation_date: new Date(2025, 11, 10),
-      duration: 55,
-      description: "Обучающее видео",
-      topRated: false
-    }];
 
-  constructor() { }
+  password: string = '';
+  private readonly coursesUrl = '/courses';
+  private errorHandler: any;
 
-  public getListCourse(): Course[] {
-    return this.courses;
+  constructor(private readonly httpClient: HttpClient) {
   }
 
-  getCourseById(id: number): Course | undefined {
-    const course = this.courses.find(c => c.id === id);
-    return course ? course : undefined;
+  getListCourse(count: number): Observable<Course[]> {
+    return this.httpClient.get<Course[]>(`${this.coursesUrl}?_start=0&_limit=${count}`);
   }
 
-  createCourse(courseData: Course): Course {
-    const ids = this.courses.map(c => c.id).filter(id => id !== undefined) as number[];
-    const newId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
+  getCourseById(courseId: number): Observable<Course> {
+    return this.httpClient.get<Course>(`${this.coursesUrl}/${courseId}`).pipe(
+      map(course => this.createCourseModel(course)),
+      catchError(error => {
+          console.error(`Ошибка загрузки курса: ${courseId}:`, error);
+          return throwError(() => new Error('Курс загружен с ошибкой!'));
+        }
+      ),
+    );
+  }
 
-    const newCourse: Course = {
-      ...courseData,
-      id: newId
+  searchCourses(input: string): Observable<Course[]> {
+    if (!input.trim()) {
+      return of([]);
+    }
+    const encodedInput = encodeURIComponent(input);
+    return this.httpClient.get<Course[]>(
+      `${this.coursesUrl}?title_like=${encodedInput}&description_like=${encodedInput}`
+    ).pipe(
+      tap(results => console.log('Результат поиска:', results)),
+      map(courses => courses.filter(c => {
+          return c.title.includes(input) || c.description.includes(input);
+        }
+      )),
+      catchError(error => {
+        console.error('Ошибка поиска:', error);
+        return of([]);
+      })
+    );
+  }
+
+  private createCourseModel(course: any): Course {
+    return {
+      id: course.id,
+      title: course.title,
+      creation_date: new Date(course.creation_date),
+      duration: course.duration,
+      description: course.description,
+      topRated: course.topRated
     };
-
-    this.courses.push(newCourse);
-    return newCourse;
   }
 
-  updateCourse(id: number, updates: Course): Course | undefined {
-    const index = this.courses.findIndex(c => c.id === id);
-    if (index === -1) return undefined;
-
-    const updatedCourse = {
-      ...this.courses[index],
-      ...updates,
-      id
-    };
-    this.courses[index] = updatedCourse;
-    return updatedCourse;
+  deleteCourse(courseId: number): Observable<void> {
+    console.log("courseId - " + courseId);
+    return this.httpClient.delete<void>(`${this.coursesUrl}/${courseId}`).pipe(
+      catchError( error => {
+        console.error(`Ошибка удаления курса: ${courseId}:`, error);
+        return throwError(() => new Error('Курс удален с ошибкой!'));
+      }),
+    );
   }
 
-  deleteCourse(id: number): boolean {
-    const initialLength = this.courses.length;
-    this.courses = this.courses.filter(c => c.id !== id);
-    return this.courses.length !== initialLength;
+  createCourse(course: Omit<Course, 'id'>): Observable<Course> {
+    return this.httpClient.post<Course>(this.coursesUrl, course).pipe(
+      catchError(error => {
+        console.error(`Ошибка создание курса: ${course}:`, error);
+        return throwError(() => new Error('Курс создан с ошибкой!'));
+      }),
+    )
+  }
+
+  updateCourse(course: Course): Observable<Course> {
+     if (!course.id) {
+      return throwError(() => new Error('ID курса не указан'));
+    }
+    const url = `${this.coursesUrl}/${course.id}`;
+    return this.httpClient.put<Course>(url, course).pipe(
+      catchError(error => {
+        console.error(`Ошибка создание курса: ${course}:`, error);
+        return throwError(() => new Error('Курс обновлен с ошибкой!'));
+      }),
+    );
   }
 
 }

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit  {
   onSearch() {
     // console.log("Нажали поиск!");
   }
-  handleLogin(loginData: { email: string, password: string }) {
+ /* handleLogin(loginData: { email: string, password: string }) {
     // 1. Вызываем метод сервиса
     this.authService.login(loginData.email, loginData.password);
 
@@ -34,14 +34,14 @@ export class AppComponent implements OnInit  {
 
     // 3. Получаем имя пользователя
     const user = this.authService.getUser();
-    this.userName = user ? `${user.first_name} ${user.last_name}` : '';
+    // this.userName = user ? `${user.first_name} ${user.last_name}` : '';
 
     // if (this.authService.isAuthenticated()) {
     //   this.router.navigateByUrl('/courses');
     // }
 
     console.log('Выполнен вход в систему:', loginData);
-  }
+  }*/
   handleLogout() {
     this.checkAuth();
   }
