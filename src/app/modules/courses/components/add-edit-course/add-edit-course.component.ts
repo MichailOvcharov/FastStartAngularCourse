@@ -1,7 +1,16 @@
-import {ChangeDetectionStrategy, Component, Output, EventEmitter, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import {Course} from "../../../../domain/course";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CoursesService} from "../../../../services/courses/courses.service";
+import {Subscription, tap} from "rxjs";
 
 @Component({
   selector: 'app-add-edit-course',
@@ -9,7 +18,7 @@ import {CoursesService} from "../../../../services/courses/courses.service";
   styleUrls: ['./add-edit-course.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddEditCourseComponent implements OnInit {
+export class AddEditCourseComponent implements OnInit, OnDestroy {
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<Course>();
   title = "Новый курс";
@@ -17,8 +26,15 @@ export class AddEditCourseComponent implements OnInit {
   showCourseForm = false;
   numId = 0;
   breadcrumb: string = "";
+  courseNew: Omit<Course, 'id'> = {
+    title: '',
+    description: '',
+    duration: 0,
+    creation_date: new Date(),
+    topRated: true
+  };
   course: Course = {
-    id: 1,
+    id: 0,
     title: '',
     description: '',
     duration: 0,
@@ -26,11 +42,20 @@ export class AddEditCourseComponent implements OnInit {
     topRated: true
   };
 
+  sub$ = new Subscription();
+
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
     private coursesService: CoursesService,
+    private cd: ChangeDetectorRef,
   ) {
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub$) {
+      this.sub$.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
@@ -46,7 +71,17 @@ export class AddEditCourseComponent implements OnInit {
       console.log('Режим редактирования курса ID:', id);
       this.numId = Number(id);
       this.title = "Редактирование курса";
-      this.course = this.coursesService.getCourseById(this.numId )!;
+      this.sub$.add((this.coursesService.getCourseById(this.numId )
+        .subscribe({
+          next: (course) => {
+          Object.assign(this.courseNew, course);
+          Object.assign(this.course, course);
+          console.log(course);
+          this.cd.detectChanges();
+          },
+            error: (err) => console.error('Ошибка:', err)
+      }))
+      );
       console.log(this.coursesService.getCourseById(this.numId ));
       this.isNewCourse = false;
     } else {
@@ -60,10 +95,19 @@ export class AddEditCourseComponent implements OnInit {
 
   onSave() {
     if (this.isNewCourse) {
-      console.log(this.course);
-      this.coursesService.createCourse(this.course);
+
+      const { id, title, creation_date, duration, description, topRated  } = this.course;
+      this.courseNew = { ...this.courseNew, title, description, duration, creation_date, topRated };
+      this.coursesService.createCourse(this.courseNew).subscribe(() => {
+          this.coursesService.getListCourse(15);
+        }
+      );
     } else if (!this.isNewCourse) {
-      this.coursesService.updateCourse(this.numId , this.course);
+      console.log(this.course);
+      this.coursesService.updateCourse(this.course).subscribe(() => {
+          this.coursesService.getListCourse(15);
+        }
+      );
     }
     this.router.navigate(['courses']);
   }

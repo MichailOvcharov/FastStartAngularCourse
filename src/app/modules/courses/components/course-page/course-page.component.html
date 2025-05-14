@@ -13,13 +13,16 @@
   [style]="{width: '550px'}">
 </p-confirmDialog>
 
+<!--| orderby: 'creation_date'-->
 <div *ngIf="!showCourseForm">
-  <div *ngIf="filteredCourses.length>0; else notFound">
-    <app-course-item *ngFor="let course of filteredCourses  | orderby: 'creation_date'"
-                     [course]="course"
-                     (edit)="onEdit($event)"
-                     (delete)="confirmDelete(course.id)">
-    </app-course-item>
+    <div *ngIf="filteredCourses$| async as courses">
+      <div *ngIf="courses.length > 0; else notFound">
+        <app-course-item *ngFor="let course of courses"
+                         [course]="course"
+                         (edit)="onEdit($event)"
+                         (delete)="confirmDelete(course.id)">
+        </app-course-item>
+      </div>
   </div>
 
   <ng-template #notFound>
@@ -31,13 +34,15 @@
   </ng-template>
 </div>
 
-<div *ngIf="!showCourseForm && (filteredCourses.length>0)" class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
-  <button pButton
-          type="button"
-          label="Загрузить еще"
-          class="p-button-lg  double-width"
-          style="background-color: var(--surface-ground); color: grey"
-          (click)="load()">
-  </button>
+<div *ngIf="filteredCourses$ | async as courses">
+  <div *ngIf="!showCourseForm && courses.length>0" class="flex justify-content-center pt-3 container" style="margin-bottom: 6rem;">
+    <button pButton
+            type="button"
+            label="Загрузить еще"
+            class="p-button-lg  double-width"
+            style="background-color: var(--surface-ground); color: grey"
+            (click)="load()">
+    </button>
+  </div>
 </div>
 

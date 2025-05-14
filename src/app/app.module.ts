@@ -15,6 +15,8 @@ import {FilterPipe} from "./modules/courses/pipes/filter.pipe";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthModule} from "./modules/auth/auth.module";
 import { AppRoutingModule } from './app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {TokenInterceptor} from "./interceptors/token.interceptor";
 
 
 @NgModule({
@@ -29,11 +31,17 @@ import { AppRoutingModule } from './app-routing.module';
     ButtonModule,
     BrowserAnimationsModule,
     AuthModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
-    DatePipe],
+    DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
